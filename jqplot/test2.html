@@ -1,0 +1,57 @@
+<!DOCTYPE html>		
+<html>	
+<head>	
+    <title>title</title>	
+    <!-- jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>	
+    <!-- jqplot cdn -->	
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.css">	
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.js"></script>	
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.json2.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.barRenderer.min.js"></script>	
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.categoryAxisRenderer.min.js"></script>	
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/plugins/jqplot.pointLabels.min.js"></script>
+</head>	
+<body>
+    <div id="chart"></div>
+    <script>
+        $(document).ready(function(){
+            // Our ajax data renderer which here retrieves a text file.
+            // it could contact any source and pull data, however.
+            // The options argument isn't used in this renderer.
+            var ajaxDataRenderer = function(url, plot, options) {
+                var ret = null;
+                $.ajax({
+                    // have to use synchronous here, else the function 
+                    // will return before the data is fetched
+                    async: false,
+                    url: url,
+                    dataType:"json",
+                    success: function(data) {
+                        ret = data;
+                    }
+                });
+                return ret;
+            };
+            
+            // The url for our json data
+            // var jsonurl = "./test.json";
+            var jsondata = [['2020/05/01', 1],['2020/05/02', 2],['2020/05/03', 3]];
+
+            // passing in the url string as the jqPlot data argument is a handy
+            // shortcut for our renderer.  You could also have used the
+            // "dataRendererOptions" option to pass in the url.
+            var plot2 = $.jqplot('chart', [jsondata],{
+                axes:{
+                    xaxis:{
+                        renderer:$.jqplot.DataAxisRenderer,
+                        tickOptions : {
+                            formatString:'%y/%m/%d'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>		
+</html>
